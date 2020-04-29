@@ -1,0 +1,12 @@
+#!/bin/sh
+
+##
+## Usage: list-vpn-clients CLIENT
+##
+
+for f in /etc/openvpn/easy-rsa/pki/issued/*.crt; do
+    cert=$(basename "$f")
+    if [ $cert != 'server.crt' ]; then
+        echo "${cert%.crt}"
+    fi
+done

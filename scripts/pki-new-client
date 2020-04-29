@@ -1,0 +1,21 @@
+#!/bin/sh
+
+client=${1?"You must specify a client name"}
+
+FOUND=0
+for c in $(pki-list-clients); do
+    if [ "$c" = "$client" ]; then
+        FOUND=1
+        break
+    fi
+done
+
+if [ $FOUND -eq 1 ]; then
+    echo "Client $client already exists" >&2
+    exit 1
+fi
+
+echo "Generating client ${client}"
+cd /usr/share/easy-rsa/
+./easyrsa --batch --pki-dir=/etc/openvpn/easy-rsa/pki build-client-full $client nopass
+./easyrsa --batch --pki-dir=/etc/openvpn/easy-rsa/pki gen-crl

@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  udp:
+    build: .
+    container_name: openvpn_udp
+    cap_add: 
+      - NET_ADMIN
+    env_file: 
+      - easy-rsa.env
+      - openvpn-udp389.env
+    ports: 
+      - 8389:389/udp
+    command: init-pki
+    volumes:
+      - ./docker-volumes/easy-rsa:/etc/openvpn/easy-rsa
+    restart: always
+
+  tcp:
+    depends_on: 
+      - udp
+    build: .
+    container_name: openvpn_tcp
+    cap_add: 
+      - NET_ADMIN
+    env_file: 
+      - easy-rsa.env
+      - openvpn-tcp53.env
+    ports: 
+      - 8053:53/tcp
+    volumes:
+      - ./docker-volumes/easy-rsa:/etc/openvpn/easy-rsa
+    restart: always

@@ -1,0 +1,59 @@
+#!/bin/sh
+
+##
+## Usage: get-client-ovpn CLIENT
+##
+
+client=${1?"You must specify a client name."}
+
+FOUND=0
+for c in $(pki-list-clients); do
+    if [ "$c" = "$client" ]; then
+        FOUND=1
+        break
+    fi
+done
+
+if [ $FOUND -eq 0 ]; then
+    echo "Client $client does not exist. Available clients are: $(pki-list-clients | paste -s -d,)" >&2
+    exit 1
+fi
+
+PORT=${PORT:-'1194'}
+PROTO=${PROTO:-'udp'}
+PUBLIC_IP=${PUBLIC_IP:-'<YOUR VPN SERVER PUBLIC IP>'}
+
+cat <<%
+client
+dev tun
+proto ${PROTO}
+remote ${PUBLIC_IP} ${PORT}
+resolv-retry infinite
+nobind
+<ca>
+%
+
+openssl x509 -in /etc/openvpn/easy-rsa/pki/ca.crt
+
+cat << %
+</ca>
+<cert>
+%
+
+openssl x509 -in /etc/openvpn/easy-rsa/pki/issued/${client}.crt
+
+cat << %
+</cert>
+<key>
+%
+
+openssl ec -in /etc/openvpn/easy-rsa/pki/private/${client}.key
+cat << %
+</key>
+<tls-crypt>
+%
+
+cat /etc/openvpn/easy-rsa/pki/private/serverta.key
+cat << %
+</tls-crypt>
+%
