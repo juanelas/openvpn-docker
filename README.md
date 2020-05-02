@@ -6,7 +6,7 @@ The PKI and OpenVPN are configured with environment variables that ca be directl
 - `easy-rsa.env`
   ```sh
   # The common name for the CA certificate 
-  EASYRSA_REQ_CN=ISG OpenVPN Root CA
+  EASYRSA_REQ_CN=OpenVPN Root CA
 
   # Use Elliptic Curve Cryptography (RECOMMENDED)
   EASYRSA_ALGO=ec
@@ -48,7 +48,7 @@ The PKI and OpenVPN are configured with environment variables that ca be directl
 
   # Set to 1 if multiple clients might connect with the same certificate/key
   # files or common names (not recommended)
-  DUPLICATE_CN=1
+  DUPLICATE_CN=0
   ```
 
 An example `docker-compose.yml` file would be:
