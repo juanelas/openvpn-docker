@@ -100,7 +100,7 @@ services:
 
   openvpn443tcp:
     depends_on: 
-      - udp
+      - openvpn1194udp
     build: .
     container_name: openvpn_tcp
     cap_add: 
