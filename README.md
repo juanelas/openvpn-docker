@@ -123,5 +123,5 @@ volumes:
 Exec the following commands in a running container for:
 - `pki-list-clients [-revoked]` returns a list with all the active clients. If you need a list of revoked clients, call it with `-revoke`
 - `pki-new-client clientName` creates a new client `clientName`
-- `pki-revoke-client clientName` revoke existing client `clientName`
+- `pki-revoke-client clientName` revokes existing client `clientName`
 - `get-client-ovpn clientName` gets .ovpn file (required for OpenVPN connect App) for client `clientName`
