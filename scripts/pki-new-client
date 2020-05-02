@@ -17,5 +17,6 @@ fi
 
 echo "Generating client ${client}"
 cd /usr/share/easy-rsa/
-./easyrsa --batch --pki-dir=/etc/openvpn/easy-rsa/pki build-client-full $client nopass
+./easyrsa --batch --pki-dir=/etc/openvpn/easy-rsa/pki build-client-full "$client" nopass
+echo "Updating CRL"
 ./easyrsa --batch --pki-dir=/etc/openvpn/easy-rsa/pki gen-crl

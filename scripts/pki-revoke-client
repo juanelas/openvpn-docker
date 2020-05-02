@@ -17,5 +17,6 @@ fi
 
 echo "Revoking client ${client}"
 cd /usr/share/easy-rsa/
-./easyrsa --batch --pki-dir=/etc/openvpn/easy-rsa/pki revoke $client
+./easyrsa --batch --pki-dir=/etc/openvpn/easy-rsa/pki revoke "$client"
+echo "Updating CRL"
 ./easyrsa --batch --pki-dir=/etc/openvpn/easy-rsa/pki gen-crl

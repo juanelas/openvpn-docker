@@ -1,6 +1,7 @@
 # docker-openvpn
 OpenVPN server with easy setup and client management in a minimal docker container (Alpine).
 
+## Setup
 The PKI and OpenVPN are configured with environment variables that ca be directly passed to docker or use .env files with docker-compose. Example files would be:
 
 - `easy-rsa.env`
@@ -51,6 +52,7 @@ The PKI and OpenVPN are configured with environment variables that ca be directl
   DUPLICATE_CN=0
   ```
 
+### Single server
 An example `docker-compose.yml` file would be:
 
 ```yaml
@@ -74,3 +76,52 @@ services:
 volumes:
   easy-rsa:
 ```
+
+### Multiple servers
+If you want to run several openvpn servers sharing the same PKI volume you can run one docker container as before and pass the option `no-init-pki` to the rest ones. You will need one ovenpn .env file for every server. An example `docker-compose.yml` file with two servers listening on 1194/udp and 443/tcp woul be:
+
+```yaml
+version: '3.1'
+
+services:
+  openvpn1194udp:
+    build: .
+    container_name: openvpn_udp
+    cap_add: 
+      - NET_ADMIN
+    env_file: 
+      - easy-rsa.env
+      - openvpn-udp1194.env
+    ports: 
+      - 1194:1194/udp
+    volumes:
+      - easy-rsa:/etc/openvpn/easy-rsa
+    restart: always
+
+  openvpn443tcp:
+    depends_on: 
+      - udp
+    build: .
+    container_name: openvpn_tcp
+    cap_add: 
+      - NET_ADMIN
+    env_file: 
+      - easy-rsa.env
+      - openvpn-tcp443.env
+    ports: 
+      - 443:443/tcp
+    command: no-init-pki  # don't try to init the PKI (it's going to be intialized in other container)
+    volumes:
+      - easy-rsa:/etc/openvpn/easy-rsa
+    restart: always
+
+volumes:
+  easy-rsa:
+```
+
+# PKI management
+Exec the following commands in a running container for:
+- `pki-list-clients [-revoked]` returns a list with all the active clients. If you need a list of revoked clients, call it with `-revoke`
+- `pki-new-client clientName` creates a new client `clientName`
+- `pki-revoke-client clientName` revoke existing client `clientName`
+- `get-client-ovpn clientName` gets .ovpn file (required for OpenVPN connect App) for client `clientName`
