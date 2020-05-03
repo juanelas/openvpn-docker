@@ -75,5 +75,8 @@ if [ "$DUPLICATE_CN" = '1' ]; then
     sed -i '/^;duplicate-cn/s/^;//g' /etc/openvpn/server.conf
 fi
 
+echo "Enabling IP masquerading of VPN traffic"
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+
 echo 'Launching openvpn'
 openvpn --config /etc/openvpn/server.conf
