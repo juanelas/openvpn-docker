@@ -76,7 +76,8 @@ if [ "$DUPLICATE_CN" = '1' ]; then
 fi
 
 echo "Enabling IP masquerading of VPN traffic"
-iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+VPN_SERVER_IP=$(echo $IP | awk -F '.' '{print $1"."$2"."$3"."($4 + 1)}')
+iptables -t nat -A POSTROUTING -s $VPN_SERVER_IP -o eth0 -j MASQUERADE
 
 echo 'Launching openvpn'
 openvpn --config /etc/openvpn/server.conf
