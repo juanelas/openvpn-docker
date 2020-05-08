@@ -56,7 +56,7 @@ The PKI and OpenVPN are configured with environment variables that ca be directl
 An example `docker-compose.yml` file would be:
 
 ```yaml
-version: '3.1'
+version: '3.4'
 
 services:
   openvpn:
@@ -81,7 +81,7 @@ volumes:
 If you want to run several openvpn servers sharing the same PKI volume you can run one docker container as before and pass the option `no-init-pki` to the rest ones. You will need one ovenpn .env file for every server. An example `docker-compose.yml` file with two servers listening on 1194/udp and 443/tcp woul be:
 
 ```yaml
-version: '3.1'
+version: '3.4'
 
 services:
   openvpn1194udp:
