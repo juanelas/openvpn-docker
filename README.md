@@ -1,4 +1,4 @@
-# docker-openvpn
+# openvpn-docker
 OpenVPN server with easy setup and client management in a minimal docker container (Alpine).
 
 ## Setup
