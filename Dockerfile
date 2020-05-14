@@ -15,6 +15,4 @@ RUN apk add --no-cache \
 COPY ./config/server.conf /etc/openvpn/server.conf
 COPY ./scripts/* /usr/local/bin/
 
-VOLUME ["/etc/openvpn/easy-rsa"]
-
 ENTRYPOINT [ "docker-entrypoint.sh" ]
