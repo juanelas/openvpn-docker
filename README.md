@@ -53,14 +53,14 @@ The PKI and OpenVPN are configured with environment variables that ca be directl
   ```
 
 ### Single server
-An example `docker-compose.yml` file would be:
+A named volume or a bind mount should be created for the PKI (server and clients's keys) to persist. An example `docker-compose.yml` file would be:
 
 ```yaml
 version: '3.4'
 
 services:
   openvpn:
-    build: .
+    image: juanelas/openvpn
     container_name: openvpn
     cap_add: 
       - NET_ADMIN
@@ -85,7 +85,7 @@ version: '3.4'
 
 services:
   openvpn1194udp:
-    build: .
+    image: juanelas/openvpn
     container_name: openvpn_udp
     cap_add: 
       - NET_ADMIN
@@ -119,7 +119,7 @@ volumes:
   easy-rsa:
 ```
 
-# PKI management
+## PKI management
 Exec the following commands in a running container for:
 - `pki-list-clients [-revoked]` returns a list with all the active clients. If you need a list of revoked clients, call it with `-revoke`
 - `pki-new-client clientName` creates a new client `clientName`
