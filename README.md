@@ -101,7 +101,7 @@ services:
   openvpn443tcp:
     depends_on: 
       - openvpn1194udp
-    build: .
+    image: juanelas/openvpn
     container_name: openvpn_tcp
     cap_add: 
       - NET_ADMIN
