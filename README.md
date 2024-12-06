@@ -1,11 +1,14 @@
 # openvpn-docker
+
 OpenVPN server with easy setup and client management in a minimal docker container (Alpine).
 
 ## Setup
-The PKI and OpenVPN are configured with environment variables that ca be directly passed to docker or use .env files with docker-compose. Example files would be:
+
+The PKI and OpenVPN are configured with environment variables that can be directly passed to docker or use .env files with docker-compose. Example files would be:
 
 - `easy-rsa.env`
-  ```sh
+  
+  ```conf
   # The common name for the CA certificate 
   EASYRSA_REQ_CN=OpenVPN Root CA
 
@@ -26,7 +29,8 @@ The PKI and OpenVPN are configured with environment variables that ca be directl
   ```
 
 - `openvpn.env`
-  ```sh
+  
+  ```conf
   # The public IP of your web server
   PUBLIC_IP=0.0.0.0
 
@@ -40,8 +44,8 @@ The PKI and OpenVPN are configured with environment variables that ca be directl
   IP_SUBNET=192.168.131.0
   IP_MASK=255.255.255.0
 
-  # If CLIENT_TO_CLIENT is set to 1, this directive to allow different clients 
-  # to be able to "see" each other. By default, clients will only see the server.
+  # Set CLIENT_TO_CLIENT to 1 to allow different clients to be able to "see" 
+  # each other. By default, clients will only see the server.
   CLIENT_TO_CLIENT=1
 
   # A DNS server that is accesible from your server
@@ -53,6 +57,7 @@ The PKI and OpenVPN are configured with environment variables that ca be directl
   ```
 
 ### Single server
+
 A named volume or a bind mount should be created for the PKI (server and clients's keys) to persist. An example `docker-compose.yml` file would be:
 
 ```yaml
@@ -78,6 +83,7 @@ volumes:
 ```
 
 ### Multiple servers
+
 If you want to run several openvpn servers sharing the same PKI volume you can run one docker container as before and pass the option `no-init-pki` to the rest ones. You will need one ovenpn .env file for every server. An example `docker-compose.yml` file with two servers listening on 1194/udp and 443/tcp woul be:
 
 ```yaml
@@ -120,8 +126,10 @@ volumes:
 ```
 
 ## PKI management
+
 Exec the following commands in a running container for:
-- `pki-list-clients [-revoked]` returns a list with all the active clients. If you need a list of revoked clients, call it with `-revoke`
+
+- `pki-list-clients [-revoked]` returns a list with all the active clients. If you need a list of revoked clients, call it with `-revoked`
 - `pki-new-client clientName` creates a new client `clientName`
 - `pki-revoke-client clientName` revokes existing client `clientName`
 - `get-client-ovpn clientName` gets .ovpn file (required for OpenVPN connect App) for client `clientName`
